@@ -1,0 +1,849 @@
+/* ==========================================================================
+   StreamFilm — design tokens & layout (docs/ui-ux-redesign.md §3–§4)
+   ========================================================================== */
+
+:root,
+[data-bs-theme="dark"] {
+    --sf-bg: #0b0d12;
+    --sf-surface: #151922;
+    --sf-surface-2: #1f2430;
+    --sf-border: rgba(255, 255, 255, .08);
+    --sf-text: #e9ecf2;
+    --sf-muted: #9aa3b2;
+    --sf-accent: #e50914;
+    --sf-accent-hover: #ff1f2b;
+    --sf-gold: #f5c518;
+
+    --sf-font-heading: 'Poppins', system-ui, sans-serif;
+    --sf-font-body: 'Inter', system-ui, sans-serif;
+    --sf-radius: 12px;
+    --sf-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+    --sf-transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease;
+
+    --bs-body-bg: var(--sf-bg);
+    --bs-body-color: var(--sf-text);
+    --bs-body-font-family: var(--sf-font-body);
+    --bs-secondary-color: var(--sf-muted);
+    --bs-tertiary-bg: var(--sf-surface);
+    --bs-primary: var(--sf-accent);
+    --bs-primary-rgb: 229, 9, 20;
+    --bs-link-color: var(--sf-text);
+    --bs-link-color-rgb: 233, 236, 242;
+    --bs-link-hover-color: var(--sf-accent-hover);
+    --bs-link-hover-color-rgb: 255, 31, 43;
+    --bs-border-color: var(--sf-border);
+    --bs-card-bg: var(--sf-surface);
+}
+
+/* ---------- Base ---------- */
+
+body {
+    background-color: var(--sf-bg);
+    color: var(--sf-text);
+    font-family: var(--sf-font-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6,
+.sf-heading {
+    font-family: var(--sf-font-heading);
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--sf-accent);
+    outline-offset: 2px;
+}
+
+.text-muted {
+    color: var(--sf-muted) !important;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+    border-radius: 999px;
+    font-weight: 500;
+    padding-inline: 1.25rem;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--sf-accent);
+    --bs-btn-border-color: var(--sf-accent);
+    --bs-btn-hover-bg: var(--sf-accent-hover);
+    --bs-btn-hover-border-color: var(--sf-accent-hover);
+    --bs-btn-active-bg: var(--sf-accent);
+    --bs-btn-active-border-color: var(--sf-accent);
+    --bs-btn-disabled-bg: var(--sf-accent);
+    --bs-btn-disabled-border-color: var(--sf-accent);
+}
+
+.btn-sf-ghost {
+    --bs-btn-color: var(--sf-text);
+    --bs-btn-border-color: var(--sf-border);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--sf-surface-2);
+    --bs-btn-hover-border-color: var(--sf-surface-2);
+    --bs-btn-disabled-color: var(--sf-muted);
+    --bs-btn-disabled-border-color: var(--sf-border);
+}
+
+/* ---------- Navbar ---------- */
+
+.sf-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    padding-block: .75rem;
+    background: linear-gradient(180deg, rgba(11, 13, 18, .9), rgba(11, 13, 18, 0));
+    transition: background .3s ease, border-color .3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.sf-navbar.is-scrolled {
+    background: rgba(11, 13, 18, .85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: var(--sf-border);
+}
+
+.sf-brand {
+    font-family: var(--sf-font-heading);
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--sf-text);
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+}
+
+.sf-brand:hover {
+    color: var(--sf-text);
+}
+
+.sf-brand__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    background: var(--sf-accent);
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.sf-brand__accent {
+    color: var(--sf-accent);
+}
+
+.sf-navbar .nav-link {
+    color: var(--sf-muted);
+    font-weight: 500;
+    position: relative;
+    transition: color .2s ease;
+}
+
+.sf-navbar .nav-link:hover,
+.sf-navbar .nav-link:focus-visible,
+.sf-navbar .nav-link.show {
+    color: var(--sf-text);
+}
+
+.sf-navbar .nav-link.active {
+    color: var(--sf-text);
+}
+
+/* Garis bawah menu aktif (pakai background agar caret dropdown ::after tetap ada) */
+@media (min-width: 992px) {
+    .sf-navbar .nav-link.active {
+        background: linear-gradient(var(--sf-accent), var(--sf-accent)) no-repeat center bottom / calc(100% - 2 * var(--bs-navbar-nav-link-padding-x, .5rem)) 2px;
+    }
+}
+
+/* Mega menu kategori */
+.sf-mega {
+    --bs-dropdown-bg: var(--sf-surface);
+    --bs-dropdown-border-color: var(--sf-border);
+    --bs-dropdown-link-color: var(--sf-muted);
+    --bs-dropdown-link-hover-color: var(--sf-text);
+    --bs-dropdown-link-hover-bg: var(--sf-surface-2);
+    --bs-dropdown-link-active-color: #fff;
+    --bs-dropdown-link-active-bg: var(--sf-accent);
+    border-radius: var(--sf-radius);
+    box-shadow: var(--sf-shadow);
+    padding: .5rem;
+}
+
+@media (min-width: 992px) {
+    .sf-mega {
+        min-width: 22rem;
+    }
+
+    .sf-mega__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: .125rem;
+    }
+}
+
+.sf-mega .dropdown-item {
+    border-radius: 8px;
+    padding: .5rem .75rem;
+}
+
+/* Search */
+.sf-search {
+    position: relative;
+}
+
+.sf-search .bi-search {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--sf-muted);
+    pointer-events: none;
+}
+
+.sf-search .form-control {
+    background: var(--sf-surface-2);
+    border: 1px solid var(--sf-border);
+    border-radius: 999px;
+    color: var(--sf-text);
+    padding-left: 2.6rem;
+    min-width: 15rem;
+}
+
+.sf-search .form-control::placeholder {
+    color: var(--sf-muted);
+}
+
+.sf-search .form-control:focus {
+    background: var(--sf-surface);
+    border-color: var(--sf-accent);
+    box-shadow: 0 0 0 .2rem rgba(229, 9, 20, .25);
+}
+
+/* Offcanvas (mobile) */
+.sf-offcanvas {
+    --bs-offcanvas-bg: var(--sf-surface);
+    --bs-offcanvas-border-color: var(--sf-border);
+}
+
+@media (max-width: 991.98px) {
+    .sf-offcanvas .nav-link {
+        padding-block: .65rem;
+    }
+
+    .sf-offcanvas .nav-link.active {
+        color: var(--sf-accent);
+    }
+
+    .sf-offcanvas .sf-mega {
+        box-shadow: none;
+        background: var(--sf-surface-2);
+    }
+}
+
+/* ---------- Film card ---------- */
+
+.sf-card {
+    display: block;
+    color: var(--sf-text);
+    border-radius: var(--sf-radius);
+}
+
+.sf-card:hover {
+    color: var(--sf-text);
+}
+
+.sf-card__poster {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    border-radius: var(--sf-radius);
+    overflow: hidden;
+    background: var(--sf-surface-2);
+    transition: var(--sf-transition);
+}
+
+.sf-card__poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Gradien + tombol play muncul saat hover/fokus */
+.sf-card__poster::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(11, 13, 18, .85) 0%, rgba(11, 13, 18, 0) 55%);
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+.sf-card__rating {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    padding: .2rem .5rem;
+    border-radius: 999px;
+    background: rgba(11, 13, 18, .75);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.sf-card__rating .bi {
+    color: var(--sf-gold);
+}
+
+.sf-card__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--sf-accent);
+    color: #fff;
+    font-size: 1.6rem;
+    box-shadow: 0 6px 20px rgba(229, 9, 20, .45);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.7);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.sf-card__play .bi {
+    margin-left: .15rem;
+}
+
+.sf-card:hover .sf-card__poster,
+.sf-card:focus-visible .sf-card__poster {
+    transform: scale(1.04);
+    box-shadow: var(--sf-shadow);
+}
+
+.sf-card:hover .sf-card__poster::after,
+.sf-card:focus-visible .sf-card__poster::after,
+.sf-card:hover .sf-card__play,
+.sf-card:focus-visible .sf-card__play {
+    opacity: 1;
+}
+
+.sf-card:hover .sf-card__play,
+.sf-card:focus-visible .sf-card__play {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.sf-card__title {
+    font-family: var(--sf-font-body);
+    font-size: .95rem;
+    font-weight: 600;
+    margin: .75rem 0 .15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sf-card__meta {
+    font-size: .8rem;
+    color: var(--sf-muted);
+    margin: 0;
+}
+
+/* ---------- Film row (carousel horizontal) ---------- */
+
+.sf-row {
+    margin-bottom: 3rem;
+}
+
+.sf-row__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sf-row__title {
+    font-size: 1.375rem;
+    margin: 0;
+}
+
+.sf-row__more {
+    color: var(--sf-muted);
+    font-size: .875rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.sf-row__more:hover {
+    color: var(--sf-accent-hover);
+}
+
+.sf-row__nav {
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid var(--sf-border);
+    background: var(--sf-surface);
+    color: var(--sf-text);
+    transition: var(--sf-transition);
+}
+
+.sf-row__nav:hover:not(:disabled) {
+    background: var(--sf-surface-2);
+}
+
+.sf-row__nav:disabled {
+    opacity: .35;
+}
+
+.sf-row__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 45%;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* ruang agar efek scale & shadow kartu tidak terpotong */
+    padding: .75rem .25rem 1rem;
+    margin: -.75rem -.25rem 0;
+    scrollbar-width: none;
+}
+
+.sf-row__track::-webkit-scrollbar {
+    display: none;
+}
+
+.sf-row__item {
+    scroll-snap-align: start;
+}
+
+@media (min-width: 576px) {
+    .sf-row__track { grid-auto-columns: 30%; }
+}
+
+@media (min-width: 768px) {
+    .sf-row__track { grid-auto-columns: 22%; }
+}
+
+@media (min-width: 992px) {
+    .sf-row__track { grid-auto-columns: calc((100% - 5rem) / 6); }
+}
+
+/* ---------- Genre chip ---------- */
+
+.sf-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: .35rem .9rem;
+    border-radius: 999px;
+    border: 1px solid var(--sf-border);
+    background: var(--sf-surface-2);
+    color: var(--sf-muted);
+    font-size: .85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: var(--sf-transition);
+}
+
+.sf-chip:hover {
+    color: var(--sf-text);
+    border-color: rgba(255, 255, 255, .2);
+}
+
+.sf-chip.is-active {
+    background: var(--sf-accent);
+    border-color: var(--sf-accent);
+    color: #fff;
+}
+
+.sf-chip-list {
+    display: flex;
+    gap: .5rem;
+    overflow-x: auto;
+    padding-bottom: .25rem;
+    scrollbar-width: none;
+}
+
+.sf-chip-list::-webkit-scrollbar {
+    display: none;
+}
+
+/* ---------- Hero (beranda & detail film) ---------- */
+
+.sf-hero {
+    --sf-nav-h: 3.6rem;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    /* naik ke bawah navbar transparan */
+    margin-top: calc(-1 * var(--sf-nav-h));
+    padding: calc(var(--sf-nav-h) + 3rem) 0 4rem;
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .sf-hero {
+        min-height: min(85vh, 46rem);
+    }
+}
+
+.sf-hero--detail {
+    min-height: 0;
+    padding-bottom: 3rem;
+}
+
+.sf-hero__bg {
+    position: absolute;
+    inset: -40px;
+    z-index: -2;
+    background-size: cover;
+    background-position: center 25%;
+    filter: blur(24px) brightness(.4) saturate(1.2);
+}
+
+.sf-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(90deg, var(--sf-bg) 5%, rgba(11, 13, 18, .4) 60%, rgba(11, 13, 18, .1)),
+        linear-gradient(0deg, var(--sf-bg) 0%, rgba(11, 13, 18, 0) 45%);
+}
+
+.sf-hero__content {
+    width: 100%;
+}
+
+.sf-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-bottom: 1rem;
+    color: var(--sf-accent-hover);
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.sf-hero__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: .75rem;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, .4);
+}
+
+.sf-hero__desc {
+    color: #c9cfda;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    max-width: 40rem;
+    margin-bottom: 1.75rem;
+}
+
+.sf-hero__poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: var(--sf-radius);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, .6);
+}
+
+@media (min-width: 992px) {
+    .sf-hero:not(.sf-hero--detail) .sf-hero__poster {
+        max-width: 20rem;
+        margin-left: auto;
+        transform: rotate(2deg);
+    }
+}
+
+.sf-hero .btn-sf-ghost {
+    --bs-btn-bg: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* Rating · tahun · durasi */
+.sf-meta {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1.25rem;
+    color: #c9cfda;
+    font-weight: 500;
+}
+
+.sf-meta .bi {
+    color: var(--sf-muted);
+    margin-right: .25rem;
+}
+
+.sf-meta .sf-meta__star {
+    color: var(--sf-gold);
+}
+
+/* ---------- Detail film ---------- */
+
+html {
+    scroll-padding-top: 5rem;
+    scroll-behavior: smooth;
+}
+
+.sf-section-title {
+    font-size: 1.375rem;
+    margin-bottom: 1rem;
+}
+
+.sf-player {
+    border-radius: var(--sf-radius);
+    overflow: hidden;
+    background: #000;
+    box-shadow: var(--sf-shadow);
+}
+
+.sf-player video {
+    width: 100%;
+    height: 100%;
+}
+
+.sf-player--empty > div {
+    display: grid;
+    place-items: center;
+    background: var(--sf-surface);
+}
+
+.sf-player__bg {
+    position: absolute;
+    inset: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px) brightness(.25);
+}
+
+.sf-player__message {
+    position: relative;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.sf-player__message .bi {
+    display: block;
+    font-size: 2.5rem;
+    color: var(--sf-muted);
+    margin-bottom: .75rem;
+}
+
+.sf-panel {
+    background: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    padding: 1.5rem;
+}
+
+.sf-info {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .9rem 1.25rem;
+    margin: 0;
+}
+
+.sf-info dt {
+    color: var(--sf-muted);
+    font-weight: 500;
+}
+
+.sf-info dd {
+    margin: 0;
+}
+
+/* ---------- Jelajahi ---------- */
+
+.sf-select {
+    background-color: var(--sf-surface-2);
+    border-color: var(--sf-border);
+    border-radius: 999px;
+    padding-left: 1rem;
+    min-width: 11rem;
+}
+
+.sf-select:focus {
+    border-color: var(--sf-accent);
+    box-shadow: 0 0 0 .2rem rgba(229, 9, 20, .25);
+}
+
+.sf-empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    border: 1px dashed var(--sf-border);
+    border-radius: var(--sf-radius);
+}
+
+.sf-empty > .bi {
+    display: block;
+    font-size: 3rem;
+    color: var(--sf-muted);
+    margin-bottom: 1rem;
+}
+
+/* ---------- Footer ---------- */
+
+.sf-footer {
+    background: var(--sf-surface);
+    border-top: 1px solid var(--sf-border);
+    color: var(--sf-muted);
+    margin-top: 3rem;
+    padding-top: 3rem;
+}
+
+.sf-footer h2 {
+    color: var(--sf-text);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sf-footer a {
+    color: var(--sf-muted);
+    transition: color .2s ease;
+}
+
+.sf-footer a:hover,
+.sf-footer .sf-brand {
+    color: var(--sf-text);
+}
+
+.sf-footer__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .5rem 1rem;
+}
+
+.sf-social {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--sf-surface-2);
+    color: var(--sf-text) !important;
+    font-size: 1.1rem;
+    transition: var(--sf-transition);
+}
+
+.sf-social:hover {
+    background: var(--sf-accent);
+    transform: translateY(-2px);
+}
+
+.sf-footer__bottom {
+    border-top: 1px solid var(--sf-border);
+    margin-top: 2.5rem;
+    padding-block: 1.25rem;
+    font-size: .875rem;
+}
+
+/* ---------- Skeleton & animasi (hanya aktif bila JS berjalan) ---------- */
+
+@keyframes sf-shimmer {
+    from { background-position: 150% 0; }
+    to { background-position: -50% 0; }
+}
+
+.sf-js .sf-card__poster {
+    background: linear-gradient(100deg, var(--sf-surface-2) 30%, #2a3040 50%, var(--sf-surface-2) 70%) 0 0 / 200% 100%;
+    animation: sf-shimmer 1.4s linear infinite;
+}
+
+.sf-js .sf-card__poster img {
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.sf-js .sf-card__poster.is-loaded {
+    background: var(--sf-surface-2);
+    animation: none;
+}
+
+.sf-js .sf-card__poster.is-loaded img {
+    opacity: 1;
+}
+
+.sf-js .sf-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .6s ease, transform .6s ease;
+}
+
+.sf-js .sf-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* ---------- Aksesibilitas ---------- */
+
+.sf-skip-link {
+    position: absolute;
+    top: .75rem;
+    left: .75rem;
+    z-index: 1100;
+    padding: .5rem 1rem;
+    border-radius: 999px;
+    background: var(--sf-accent);
+    color: #fff;
+    font-weight: 600;
+    transform: translateY(-200%);
+    transition: transform .2s ease;
+}
+
+main:focus {
+    outline: none;
+}
+
+.sf-skip-link:focus {
+    color: #fff;
+    transform: none;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+    }
+}

@@ -1,42 +1,73 @@
 @extends('layouts.main')
 
-@section('title', 'Daftar Film')
+@php
+    $pageTitle = $activeKategori ? 'Film ' . $activeKategori->nama_kategori : 'Jelajahi Film';
+    // Parameter yang dibawa saat berpindah kategori
+    $keep = array_filter(['q' => $q, 'sort' => $sort === 'rating' ? null : $sort]);
+@endphp
+
+@section('title', $q !== '' ? "Cari \"{$q}\"" : $pageTitle)
 
 @section('content')
-    <h2 class="text-center mb-4">Daftar Film</h2>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ $pageTitle }}</h1>
+            @if ($q !== '')
+                <p class="text-muted mb-0">
+                    Hasil untuk "<span class="text-body">{{ $q }}</span>" · {{ $films->total() }} film
+                    <a href="{{ url()->current() . ($sort !== 'rating' ? '?sort=' . $sort : '') }}" class="ms-2 small"><i class="bi bi-x-lg" aria-hidden="true"></i> Reset</a>
+                </p>
+            @else
+                <p class="text-muted mb-0">{{ $films->total() }} film</p>
+            @endif
+        </div>
 
-    <div class="row" id="film-container">
-        @foreach ($films as $film)
-            <div class="col-md-3 mb-4">
-                <div class="card" onclick="window.location='{{ route('films.show', $film->id) }}'">
-                    <img src="{{ $film->poster_url }}" class="card-img-top" alt="{{ $film->judul }}">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ $film->judul }}</h5>
-                        <p class="card-text text-muted">{{ $film->tahun_rilis }}</p>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+        <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center gap-2">
+            @if ($q !== '')
+                <input type="hidden" name="q" value="{{ $q }}">
+            @endif
+            <label for="sort" class="text-muted small text-nowrap">Urutkan</label>
+            <select id="sort" name="sort" class="form-select form-select-sm sf-select" onchange="this.form.submit()">
+                @foreach ($sorts as $value => $label)
+                    <option value="{{ $value }}" @selected($sort === $value)>{{ $label }}</option>
+                @endforeach
+            </select>
+            <noscript><button type="submit" class="btn btn-sm btn-sf-ghost">Terapkan</button></noscript>
+        </form>
     </div>
 
-    {{-- Tombol Load More --}}
-    @if ($films->hasMorePages())
-        <div class="text-center mt-3">
-            <button class="btn btn-primary" id="load-more">Load More</button>
-        </div>
-    @endif
+    <nav class="sf-chip-list mb-4" aria-label="Kategori">
+        <x-genre-chip :href="route('films.index', $keep)" :active="! $activeKategori">Semua</x-genre-chip>
+        @foreach ($navKategoris as $kategori)
+            <x-genre-chip :kategori="$kategori" :href="route('films.kategori', [$kategori] + $keep)" :active="$activeKategori?->id === $kategori->id" />
+        @endforeach
+    </nav>
 
-    {{-- Script untuk Load More --}}
-    <script>
-        let page = 1;
-        document.getElementById('load-more').addEventListener('click', function () {
-            page++;
-            fetch(`?page=${page}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('film-container').innerHTML += data;
-                })
-                .catch(error => console.log(error));
-        });
-    </script>
+    @if ($films->isEmpty())
+        <div class="sf-empty">
+            <i class="bi bi-film" aria-hidden="true"></i>
+            <h2 class="h5">Film tidak ditemukan</h2>
+            <p class="text-muted">
+                @if ($q !== '')
+                    Tidak ada film yang cocok dengan "{{ $q }}"{{ $activeKategori ? ' di kategori ' . $activeKategori->nama_kategori : '' }}.
+                @else
+                    Belum ada film di kategori ini.
+                @endif
+            </p>
+            <a href="{{ route('films.index') }}" class="btn btn-primary">Lihat semua film</a>
+        </div>
+    @else
+        <h2 class="visually-hidden">Daftar film</h2>
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 gy-4" id="film-grid">
+            @include('films._grid')
+        </div>
+
+        @if ($films->hasMorePages())
+            <div class="text-center mt-5">
+                <button type="button" class="btn btn-sf-ghost px-4" data-load-more="#film-grid" data-next="{{ $films->nextPageUrl() }}">
+                    Muat lebih banyak
+                </button>
+            </div>
+        @endif
+    @endif
 @endsection
