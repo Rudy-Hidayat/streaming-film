@@ -12,9 +12,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            FilmSeeder::class,
             KategoriSeeder::class,
-            FilmKategoriSeeder::class,
+            FilmSeeder::class, // sekaligus mengisi relasi kategori & detail film
         ]);
     }
 }

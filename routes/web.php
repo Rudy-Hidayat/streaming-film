@@ -23,5 +23,9 @@ use App\Http\Controllers\FilmController;
 // // Route untuk menampilkan film berdasarkan kategori
 // Route::get('/kategori/{kategoriId}', [FilmController::class, 'byKategori']);
 
+Route::get('/', [FilmController::class, 'home'])->name('home');
+
 Route::get('/films', [FilmController::class, 'index'])->name('films.index');
 Route::get('/films/{id}', [FilmController::class, 'show'])->name('films.show');
+Route::get('/films/{film}/poster.svg', [FilmController::class, 'poster'])->name('films.poster');
+Route::get('/kategori/{kategori}', [FilmController::class, 'byKategori'])->name('films.kategori');

@@ -22,6 +22,12 @@ class KategoriSeeder extends Seeder
             ['nama_kategori' => 'Thriller', 'created_at' => now(), 'updated_at' => now()],
         ];
 
-        DB::table('kategoris')->insert($kategoris);
+        // updateOrInsert agar aman dijalankan berulang kali (tidak membuat kategori ganda)
+        foreach ($kategoris as $kategori) {
+            DB::table('kategoris')->updateOrInsert(
+                ['nama_kategori' => $kategori['nama_kategori']],
+                $kategori
+            );
+        }
     }
 }

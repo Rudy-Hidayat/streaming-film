@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f2430"/>
+      <stop offset="1" stop-color="#151922"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="url(#bg)"/>
+  <g fill="none" stroke="#9aa3b2" stroke-width="10" stroke-linejoin="round" opacity=".55" transform="translate(130 225)">
+    <rect x="5" y="5" width="130" height="100" rx="10"/>
+    <path d="M5 35h130M5 75h130M40 5v100M100 5v100"/>
+  </g>
+  <text x="200" y="385" fill="#9aa3b2" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="500" text-anchor="middle" opacity=".8">Poster belum tersedia</text>
+</svg>
